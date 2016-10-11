@@ -62,3 +62,14 @@ Example result:
     ]
 }
 ```
+
+You vagrant boxes files shuld store in folder with same name as vagrantbox.
+And should use name format `<provider>-<version>.box`
+
+In vagrant file just write:
+
+```Ruby
+    config.vm.box = "example"
+    config.vm.box_version = "1.7"
+    config.vm.box_url = "http://10.1.1.111/hosted/example"
+```
