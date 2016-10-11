@@ -1,12 +1,3 @@
--- Check request method
-if ngx.req.get_method() ~= "GET" then
-    ngx.status = ngx.HTTP_NOT_ALLOWED
-    ngx.header["Content-Type"] = "text/plain; charset=utf-8"
-    ngx.say("Method not allowed")
-    return
-end
-
-
 -- Get location path
 local box_root = ngx.var.box_prefix .. ngx.var.box_name .. '/'
 local box_path = box_root .. '*.box'
@@ -33,9 +24,9 @@ local vagrant = {
 for i, box in pairs(glob) do
     local box_provider, box_version = string.match(box, box_root .. '(%a+)-(.+).box')
     -- get hash of file
-    local sha1sum = assert(io.popen('sha1sum ' .. box .. ' | cut -d " " -f1'))
-    local checksum = string.gsub(assert(sha1sum:read('*a')), "\n", "")
-    sha1sum:close()
+    local shasum = assert(io.popen('sha1sum ' .. box .. ' | cut -d " " -f1'))
+    local checksum = string.gsub(assert(shasum:read('*a')), "\n", "")
+    shasum:close()
     -- make provider row
     local provider = {
         name = box_provider, -- virtualbox or docker
@@ -70,6 +61,6 @@ end
 
 
 -- Return response
-ngx.header["Content-Type"] = "application/json; charset=utf-8"
+ngx.header.content_type = "application/json"
 local json = require("json")
 ngx.say(json.encode(vagrant))
