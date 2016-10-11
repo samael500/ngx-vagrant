@@ -1,5 +1,5 @@
-# ngnx-vagrant
-Self-hosted Vagrant boxes with versions by nginx + lua
+# ngx-vagrant
+Self-hosted Vagrant boxes with versions by [nginx](https://nginx.org/) + [lua](http://www.lua.ru/)
 
 `GET http://10.1.1.111/hosted/example`
 
