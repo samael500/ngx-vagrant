@@ -20,6 +20,7 @@ if not glob then
     return
 end
 
+
 -- Form box response
 local vagrant = {
     name = ngx.var.box_name,
@@ -27,34 +28,37 @@ local vagrant = {
     versions = {}
 }
 
-local version = {
-    version = "1.0",
-    providers = {}
-}
 
-
+-- Discover the boxes
 for i, box in pairs(glob) do
     local box_provider, box_version = string.match(box, box_root .. '(%a+)-(.+).box')
+    -- get hash of file
+    local sha1sum = assert(io.popen('sha1sum ' .. box .. ' | cut -d " " -f1'))
+    local checksum = string.gsub(assert(sha1sum:read('*a')), "\n", "")
+    sha1sum:close()
+    -- make provider row
     local provider = {
         name = box_provider, -- virtualbox or docker
-        url = "http://boxes.wbtech.pro/arendohod/1.0.box",
+        url = string.format(ngx.var.box_url, ngx.var.box_name, box_provider, box_version),
         checksum_type = "sha1",
-        checksum = ""
+        checksum = checksum
     }
+    -- create or update version
     local flag = false;
-    for version in vagrant["versions"] do
-        if versions["version"] == box_version then
-            ngx.log(ngx.ERR, version)
+    for key, row in pairs(vagrant["versions"]) do
+        if row["version"] == box_version then
+            -- Upgrade current version
             table.insert(
-                version["providers"], provider
+                vagrant["versions"][key]["providers"], provider
             )
             flag = true;
         end
     end
     if not flag then
+        -- Create new version
         table.insert(
             vagrant["versions"], {
-                versions = box_version,
+                version = box_version,
                 providers = {
                     provider
                 }
@@ -64,9 +68,8 @@ for i, box in pairs(glob) do
 
 end
 
--- Discover the boxes
 
--- ngx.header["Content-Type"] = "application/json; charset=utf-8"
-ngx.header["Content-Type"] = "text/plain;charset=utf-8"
+-- Return response
+ngx.header["Content-Type"] = "application/json; charset=utf-8"
 local json = require("json")
 ngx.say(json.encode(vagrant))
