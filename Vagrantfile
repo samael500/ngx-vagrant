@@ -10,10 +10,15 @@ Vagrant.configure(2) do |config|
   config.vm.synced_folder ".", "/home/vagrant/proj", type: "nfs",
     :mount_options => ['actimeo=2']
   config.vm.hostname = hostname
-  config.vm.post_up_message = "#{hostname} dev server successfuly started.
+  config.vm.post_up_message = "#{hostname} server successfuly started.
     Connect to host with:
     http://#{ip_address}/
-    or over ssh with `vagrant ssh`"
+    or over ssh with `vagrant ssh`
+
+    Vagrant metadata examle GET:
+      http://#{ip_address}/hosted/example
+  "
+
   # Set box name
   config.vm.define :"#{hostname}" do |t|
   end
