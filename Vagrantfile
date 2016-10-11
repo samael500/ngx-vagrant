@@ -16,7 +16,7 @@ Vagrant.configure(2) do |config|
     or over ssh with `vagrant ssh`
 
     Vagrant metadata examle GET:
-      http://#{ip_address}/hosted/example
+      http://#{ip_address}/example
   "
 
   # Set box name

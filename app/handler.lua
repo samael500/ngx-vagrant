@@ -61,6 +61,6 @@ end
 
 
 -- Return response
-ngx.header.content_type = "application/json"
+ngx.header.content_type = "application/json; charset=utf-8"
 local json = require("json")
 ngx.say(json.encode(vagrant))
