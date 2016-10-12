@@ -27,13 +27,13 @@ Example result:
             "providers": [
                 {
                     "url": "http://10.1.1.111/example/docker-1.0.box",
-                    "checksum": "180fba376a2a6616bd20c7bb2e7e46d812cc2c03",
+                    "checksum": "65cb550765d251604dcfeedc36ea61f66ce205c4",
                     "name": "docker",
                     "checksum_type": "sha1"
                 },
                 {
                     "url": "http://10.1.1.111/example/virtualbox-1.0.box",
-                    "checksum": "62990a09f9480d862d72567f5897c31db022ab2e",
+                    "checksum": "c0a9d5c3d6679cfcc4b1374e3ad42465f3dd596e",
                     "name": "virtualbox",
                     "checksum_type": "sha1"
                 }
@@ -44,7 +44,7 @@ Example result:
             "providers": [
                 {
                     "url": "http://10.1.1.111/example/docker-1.3.box",
-                    "checksum": "012e19688b235ebd06b8af060a0c30bbbe78b762",
+                    "checksum": "def7148aa7ded879dbf5944af4785c2b09aba97a",
                     "name": "docker",
                     "checksum_type": "sha1"
                 }
@@ -55,7 +55,7 @@ Example result:
             "providers": [
                 {
                     "url": "http://10.1.1.111/example/virtualbox-1.4.box",
-                    "checksum": "bcec2e031e9f3f95bbb68eab33d6b1d9f1032bb4",
+                    "checksum": "63b06d8c065f5c2522c356d4d6ceb718ec3f8198",
                     "name": "virtualbox",
                     "checksum_type": "sha1"
                 }
@@ -66,7 +66,7 @@ Example result:
             "providers": [
                 {
                     "url": "http://10.1.1.111/example/virtualbox-1.7.box",
-                    "checksum": "3de1bde2a6d9d7c69230e6476002aa95e64a9c1f",
+                    "checksum": "3221c0fd58a4b2430efc5eeaf09cb8eaf877f3a9",
                     "name": "virtualbox",
                     "checksum_type": "sha1"
                 }
