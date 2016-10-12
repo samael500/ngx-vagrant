@@ -1,5 +1,18 @@
-# ngx-vagrant
-Self-hosted Vagrant boxes with versions by [nginx](https://nginx.org/) + [lua](http://www.lua.ru/)
+ngx-vagrant
+===========
+
+Self-hosted Vagrant boxes with versions by [nginx](https://nginx.org/) + [lua](http://www.lua.org/)
+
+### Try it yourself
+With vagrant and virtualbox
+
+```
+$ git clone git@github.com:Samael500/ngx-vagrant.git
+$ cd ngx-vagrant
+$ vagrant up
+```
+
+### Example result
 
 `GET http://10.1.1.111/example`
 
@@ -64,7 +77,10 @@ Example result:
 ```
 
 You vagrant boxes files shuld store in folder with same name as vagrantbox.
+
 And should use name format `<provider>-<version>.box`
+
+### Usage in Vagrantfile
 
 In vagrant file just write:
 
