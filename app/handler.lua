@@ -1,66 +1,67 @@
 -- Get location path
+local hash = 'sha1'
 local box_root = ngx.var.box_prefix .. ngx.var.box_name .. '/'
-local box_path = box_root .. '*.box'
 local posix = require "posix"
-local glob = posix.glob(box_path)
+local glob = posix.glob (box_root .. '*.box')
+
 
 if not glob then
     ngx.status = ngx.HTTP_NOT_FOUND
-    ngx.header["Content-Type"] = "text/plain; charset=utf-8"
-    ngx.say("Box not found")
-    return
+    return ngx.exit (ngx.HTTP_NOT_FOUND)
 end
 
 
--- Form box response
-local vagrant = {
-    name = ngx.var.box_name,
-    description = string.format("Boxes for %s proj", ngx.var.box_name),
-    versions = {}
-}
+function get_hash (filepath)
+    -- Calc hashum of given filepath
+    local command = string.format ('%ssum %s | cut -d " " -f1', hash, filepath)
+    local hashsum = assert (io.popen (command, 'r'))
+    local result = string.gsub (hashsum:read ('*a'), '\n', '')
+    hashsum:close ()
+    return result
+end
 
 
--- Discover the boxes
-for i, box in pairs(glob) do
-    local box_provider, box_version = string.match(box, box_root .. '(%a+)-(.+).box')
-    -- get hash of file
-    local shasum = assert(io.popen('sha1sum ' .. box .. ' | cut -d " " -f1'))
-    local checksum = string.gsub(assert(shasum:read('*a')), "\n", "")
-    shasum:close()
-    -- make provider row
-    local provider = {
+local function make_provider (filepath)
+    -- Make vagrant provider from given file
+    local box_provider, box_version = string.match (
+        filepath, string.format ('%s(%%a+)-(.+).box', box_root))
+    return {
         name = box_provider, -- virtualbox or docker
-        url = string.format(ngx.var.box_url, ngx.var.box_name, box_provider, box_version),
-        checksum_type = "sha1",
-        checksum = checksum
-    }
-    -- create or update version
-    local flag = false;
-    for key, row in pairs(vagrant["versions"]) do
-        if row["version"] == box_version then
-            -- Upgrade current version
-            table.insert(
-                vagrant["versions"][key]["providers"], provider
-            )
-            flag = true;
+        url = string.format (ngx.var.box_url, ngx.var.box_name, box_provider, box_version),
+        checksum_type = hash,
+        checksum = get_hash(filepath)
+    }, box_version
+end
+
+
+local versions = {}
+-- Discover the boxes
+for _, box in ipairs (glob) do
+    local provider, version = make_provider (box)
+    if version then
+        if versions[version] ~= nil then
+            table.insert (versions[version]['providers'], provider)
+        else
+            table.insert (versions, version, {
+                version = version,
+                providers = {provider}
+            })
         end
     end
-    if not flag then
-        -- Create new version
-        table.insert(
-            vagrant["versions"], {
-                version = box_version,
-                providers = {
-                    provider
-                }
-            }
-        )
-    end
-
 end
 
+
+-- Make result response
+local vagrant = {
+    name = ngx.var.box_name,
+    description = string.format ("Boxes for %s proj", ngx.var.box_name),
+    versions = {}
+}
+for _, version in ipairs (versions) do
+    table.insert (vagrant['versions'], version)
+end
 
 -- Return response
 ngx.header.content_type = "application/json; charset=utf-8"
-local json = require("json")
-ngx.say(json.encode(vagrant))
+local json = require "json"
+ngx.say (json.encode (vagrant))
