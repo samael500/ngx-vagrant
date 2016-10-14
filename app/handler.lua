@@ -39,13 +39,13 @@ local versions = {}
 for _, box in ipairs (glob) do
     local provider, version = make_provider (box)
     if version then
-        if versions[version] ~= nil then
-            table.insert (versions[version]['providers'], provider)
-        else
-            table.insert (versions, version, {
+        if versions[version] == nil then
+            versions[version] = {
                 version = version,
                 providers = {provider}
-            })
+            }
+        else
+            table.insert (versions[version]['providers'], provider)
         end
     end
 end
@@ -57,7 +57,7 @@ local vagrant = {
     description = string.format ("Boxes for %s proj", ngx.var.box_name),
     versions = {}
 }
-for _, version in ipairs (versions) do
+for _, version in pairs (versions) do
     table.insert (vagrant['versions'], version)
 end
 
