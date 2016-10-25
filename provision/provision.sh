@@ -2,7 +2,7 @@
 sudo apt-get -y update
 
 # Install dependencies
-sudo apt-get -y install make nginx-extras lua5.1 git-core luarocks
+sudo apt-get -y install make nginx-extras lua5.1 luarocks
 sudo luarocks install luaposix
 sudo luarocks install JSON4Lua
 
