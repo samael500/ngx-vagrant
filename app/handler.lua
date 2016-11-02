@@ -23,8 +23,7 @@ end
 
 local function make_provider (filepath)
     -- Make vagrant provider from given file
-    local box_provider, box_version = string.match (
-        filepath, string.format ('%s(%%a+)-(.+).box', box_root))
+    local box_provider, box_version = string.match (filepath, '.*/(%a+)-(.+).box')
     return {
         name = box_provider, -- virtualbox or docker
         url = string.format (ngx.var.box_url, ngx.var.box_name, box_provider, box_version),
