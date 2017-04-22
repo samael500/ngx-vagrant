@@ -3,6 +3,8 @@ ngx-vagrant
 
 Self-hosted Vagrant boxes with versions by [nginx](https://nginx.org/) + [lua](http://www.lua.org/)
 
+About blog post `ru` [Собственное хранилище версированных Vagrant боксов с помощью Nginx и Lua](https://maks.live/articles/drugoe/sobstvennoe-khranilishche-versirovannykh-vagrant-boksov-s-pomoshchiu-nginx-i-lua/)
+
 ### Try it yourself
 With vagrant and virtualbox
 
